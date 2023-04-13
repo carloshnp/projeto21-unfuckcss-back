@@ -1,4 +1,4 @@
-import { User } from "src/user.schema/user.schema";
+import { User } from "src/schema/user.schema/user.schema";
 
 export class LoginResponse {
   constructor(
