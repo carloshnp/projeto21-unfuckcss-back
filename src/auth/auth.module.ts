@@ -8,20 +8,27 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TokenBlacklistService } from 'src/token-blacklist/token-blacklist.service';
 import { TokenBlacklistSchema } from 'src/schema/token-blacklist.schema/token-blacklist.schema';
 import { JwtStrategy } from './strategies/jwt/jwt.service';
+import { MongooseConfigService } from 'mongoose.config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule,
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     PassportModule,
-    JwtModule.register({
-      secret: "mysecretkey",
-      signOptions: { expiresIn: '1d' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '1d' },
+      }),
+      inject: [ConfigService],
     }),
     MongooseModule.forFeature([
       { name: 'TokenBlacklist', schema: TokenBlacklistSchema },
     ]),
   ],
-  providers: [AuthService, TokenBlacklistService, JwtStrategy],
+  providers: [AuthService, TokenBlacklistService, JwtStrategy, MongooseConfigService],
   controllers: [AuthController],
   exports: [AuthService],
 })

@@ -8,7 +8,7 @@ import { Injectable } from '@nestjs/common';
 export class MongooseConfigService implements MongooseOptionsFactory {
   createMongooseOptions(): MongooseModuleOptions {
     return {
-      uri: 'mongodb://localhost:27017/unfuckcss',
+      uri: process.env.MONGODB_URI,
       useNewUrlParser: true,
       useUnifiedTopology: true,
     };

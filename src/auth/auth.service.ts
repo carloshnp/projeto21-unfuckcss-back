@@ -50,8 +50,12 @@ export class AuthService {
 
   async login(loginDto: LoginDto): Promise<LoginResponse> {
     const user = await this.validateUser(loginDto.email, loginDto.password);
-    const payload = { sub: user.id };
+    console.log(user);
+    console.log('user');
+    const payload = { sub: user._id, username: user.username, id: user._id };
+    console.log(payload);
     const accessToken = this.jwtService.sign(payload);
+    console.log(accessToken);
     return new LoginResponse(user, accessToken);
   }
 

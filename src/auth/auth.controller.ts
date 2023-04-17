@@ -15,6 +15,7 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() loginDto: LoginDto): Promise<{ access_token: string }> {
+    console.log(process.env.JWT_SECRET)
     const { accessToken } = await this.authService.login(loginDto);
     return { access_token: accessToken };
   }
